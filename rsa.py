@@ -4,7 +4,6 @@ import timeit
 from math import gcd
 from bitness import generate_prime
 from hash_alg import SHA1
-from simple_hash import simple_hash
 
 
 def modinv(a, m):
@@ -69,28 +68,18 @@ class RSA:
         return ''.join(chr(self.chinese_remainder_theorem(c)) for c in encrypted_message)
 
     def sign(self, message):
-        # md4 = MD4()
-        # md4.update(message)
-        # message_hash = int(md4.hexdigest(), 16)
-        # message_hash = int(hashlib.sha1(message.encode()).hexdigest(), 16)
-        message_hash = simple_hash(message)
-        # sha1 = SHA1()  # Створення екземпляра SHA1
-        # sha1.update(message)  # Оновлення даних для обчислення хешу
-        # message_hash = int(sha1.hexdigest(), 16)  # Перетворення хешу в ціле число
-        # message_hash &= ((1 << bit_length) - 1)
+        sha1 = SHA1()  # Створення екземпляра SHA1
+        sha1.update(message)  # Оновлення даних для обчислення хешу
+        message_hash = int(sha1.hexdigest(), 16)  # Перетворення хешу в ціле число
+        message_hash &= ((1 << bit_length) - 1) # Обмеження на довжину в бітах
         signature = pow(message_hash, self.d, self.n)
         return signature
 
     def verify(self, message, signature):
-        # md4 = MD4()
-        # md4.update(message)
-        # message_hash = int(md4.hexdigest(), 16)
-        # message_hash = int(hashlib.sha1(message.encode()).hexdigest(), 16)
-        message_hash = simple_hash(message)
-        # sha1 = SHA1()  # Створення екземпляра SHA1
-        # sha1.update(message)  # Оновлення даних для обчислення хешу
-        # message_hash = int(sha1.hexdigest(), 16)  # Перетворення хешу в ціле число
-        # message_hash &= ((1 << bit_length) - 1)
+        sha1 = SHA1()  # Створення екземпляра SHA1
+        sha1.update(message)  # Оновлення даних для обчислення хешу
+        message_hash = int(sha1.hexdigest(), 16)  # Перетворення хешу в ціле число
+        message_hash &= ((1 << bit_length) - 1)
         decrypted_hash = pow(signature, self.e, self.n)
         return message_hash == decrypted_hash
 

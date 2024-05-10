@@ -1,7 +1,10 @@
 from rsa import RSA, User
 import time
 
+
 def test_rsa(bit_length):
+    print("")
+    print("")
     print(f"Testing RSA with {bit_length}-bit keys...")
     start_time = time.time()
     rsa = RSA(bit_length)
